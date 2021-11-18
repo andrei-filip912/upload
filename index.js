@@ -5,7 +5,7 @@ const { urlencoded, json } = require('body-parser');
 // const { resolve } =  require('path');
 const cloudinary = require('./config/cloudinaryConfig');
 const {multerUploads, dataUri} = require('./middleware/multer');
-
+const mongodb = require('./config/mongodbConfig');
 
 
 const app = express();
@@ -16,6 +16,9 @@ app.use(json());
 
 
 // app.get('/*', (req, res) => res.sendFile(__dirname));
+
+mongodb.getQuery();
+
 
 app.post('/upload', multerUploads, function (req, res) {
 	if(req.file){
