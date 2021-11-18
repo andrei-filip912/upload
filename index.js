@@ -1,16 +1,43 @@
+require('dotenv').config();
+
 const express = require('express');
+const { urlencoded, json } = require('body-parser');
+// const { resolve } =  require('path');
+const cloudinary = require('./config/cloudinaryConfig');
+const {multerUploads, dataUri} = require('./middleware/multer');
+
+
+
 const app = express();
-const port = 4000;
+const port = process.env.PORT || 4000;
 
-const multer  = require('multer');
-const upload = multer({ dest: 'uploads/' });
+app.use(urlencoded({ extended: false}));
+app.use(json());
 
-app.get('/', (req, res) => res.json({ message: 'Hello world!'}));
 
-app.post('/movies/upload', upload.single('movie'), function (req, res, next) {
-	console.log('Movie', req.file);  
+// app.get('/*', (req, res) => res.sendFile(__dirname));
+
+app.post('/upload', multerUploads, function (req, res) {
+	if(req.file){
+		const file = dataUri(req);
+		cloudinary.config();
+
+		return cloudinary.uploader.upload(file).then((result) => {
+			const image = result.url;
+			return res.status(200).json({
+				messge: 'Your image has been uploded successfully to cloudinary',
+				data: {
+					image
+				},
+			});
+		}).catch((error) => res.status(400).json({
+			messge: 'someting went wrong while processing your request',
+			data: {
+				err
+			},
+		}));
+	}
 });
 
-
-app.listen(port, () => console.log('Listening to port 4000'));
+app.listen(port, () => console.log(`Listening to port ${port}`));
 
