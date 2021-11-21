@@ -2,25 +2,29 @@ require('dotenv').config();
 
 const express = require('express');
 const { urlencoded, json } = require('body-parser');
-// const { resolve } =  require('path');
 const cloudinary = require('./config/cloudinaryConfig');
 const {multerUploads, dataUri} = require('./middleware/multer');
 const mongodb = require('./config/mongodbConfig');
+const { jwtCheck } = require('./auth/checkJwt');
+// const { checkJwt } = require('../client/src/api/auth0-express-js-sample-main/src/authz/check-jwt');
+// const apiRoute = express.Router();
 
 
 const app = express();
 const port = process.env.PORT || 4000;
 
+
+// app.use(apiRoute);
 app.use(urlencoded({ extended: false}));
 app.use(json());
+// app.use(jwtCheck);
 
 
 // app.get('/*', (req, res) => res.sendFile(__dirname));
+// mongodb.getQuery();
 
-mongodb.getQuery();
 
-
-app.post('/upload', multerUploads, function (req, res) {
+app.post('/upload',[jwtCheck, multerUploads], function (req, res) {
 	if(req.file){
 		const file = dataUri(req);
 		cloudinary.config();
