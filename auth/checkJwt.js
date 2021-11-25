@@ -9,7 +9,7 @@ var jwtCheck = jwt({
           jwksRequestsPerMinute: 5,
           jwksUri: 'https://dev-589liq0e.us.auth0.com/.well-known/jwks.json'
     }),
-    audience: 'https://upload.com',
+    audience: 'https://express.sample',
     issuer: 'https://dev-589liq0e.us.auth0.com/',
     algorithms: ['RS256']
 });
