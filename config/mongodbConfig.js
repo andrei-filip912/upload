@@ -1,24 +1,8 @@
-const { MongoClient } = require('mongodb');
 require('dotenv').config();
+const mongoose = require('mongoose');
 
 
-const uri = `mongodb+srv://af912:${process.env.MONGODB_USER_PASSWORD}@cluster0.ma8hc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-//  client.connect(err => {
-//   const collection = client.db("test").collection("devices");
-//   // perform actions on the collection object
-//   client.close();
-//   return collection;
-// });
-
-function getQuery() {
-    client.connect(err => {
-        const collection = client.db("sample_analytics").collection("accounts");
-        // perform actions on the collection object
-        console.log(collection.findOne(ObjectId("5ca4bbc7a2dd94ee5816238d")));
-        client.close();
-      });
-}
-
-module.exports = {getQuery};
+const dbUri = `mongodb+srv://vscodeUser:${process.env.MONGODB_USER_PASSWORD}@cluster0.ma8hc.mongodb.net/movie_upload?retryWrites=true&w=majority`;
+mongoose.connect(dbUri, {useNewUrlParser: true, useUnifiedTopology: true})
+  .then((res) => console.log('connected to db!'))  // instead of connected to db you could use app listen to port
+  .catch((err) => console.log(err));

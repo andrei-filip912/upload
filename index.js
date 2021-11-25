@@ -2,10 +2,12 @@ require("dotenv").config();
 const express = require("express");
 const cloudinary = require("./config/cloudinaryConfig");
 const { multerUploads, dataUri } = require("./middleware/multer");
-const mongodb = require("./config/mongodbConfig");
 const { jwtCheck } = require("./auth/checkJwt");
 const jwt_decode = require('jwt-decode');
 const cors = require("cors");
+// const { getQuery } = require('./config/mongodbConfig');
+require('./config/mongodbConfig');
+
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -15,13 +17,14 @@ app.use(express.json({strict: false}));
 app.use(express.urlencoded({ extended: true }));
 
 
+
 app.post("/upload", [jwtCheck, multerUploads], function (req, res) {
   console.log("start");
   console.log(req.body);
 
 
   //jwt decoding
-  console.log(jwt_decode(req.get('Authorization').split(' ')[1]));
+  // console.log(jwt_decode(req.get('Authorization').split(' ')[1]));
 
   if (req.file) {
     console.log("IN");
