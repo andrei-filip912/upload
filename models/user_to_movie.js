@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const user_to_movieSchema = new Schema({
+    _id: mongoose.Types.ObjectId,
     user_id: {
         type: String,
         required: true
@@ -10,7 +11,7 @@ const user_to_movieSchema = new Schema({
     movies: [{
         title: String,
         url: String,
-        length: Double
+        length: Number
     }]
 }, { timestamps: true});
 
