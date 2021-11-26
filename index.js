@@ -6,6 +6,7 @@ const { jwtCheck } = require("./auth/checkJwt");
 const jwt_decode = require("jwt-decode");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const User_to_movie = require('./models/user_to_movie');
 
 // create the app, set the port
 const app = express();
@@ -27,19 +28,42 @@ app.use(express.urlencoded({ extended: true }));
 
 
 app.get("/add-user_to_movie", (req, res) => {
+  const user_to_movie = new User_to_movie({
+    user_id: 'auth0|afsdfasdfasdf',
+  movies: [{
+      title: 'Cicarlau',
+      url: 'www.sdf.cosd',
+      length: 5123451435
+  }]
+  });
 
+  user_to_movie.save()
+  .then((result) => res.send(result))
+  .catch(err => console.log(err));
+});
+
+app.get('/add-or-create-user_to_movie', (req, res) => {
+  const newMovie = {
+    title: 'Cicarlau 3D',
+      url: 'www.abc.cosd',
+      length: 12346
+  };
+  const filter = { user_id: 'auth0|afsdfasdfasdf' };
+
+  User_to_movie.findOneAndUpdate(filter, newMovie, { returnOriginal: false})
+  .then(response => res.send(response))
+  .catch(err => console.log(err));
+
+  // User_to_movie.find()
+  // .then((result) => res.send(result))
+  // .catch(err => console.log(err));
 });
 
 app.post("/upload", [jwtCheck, multerUploads], function (req, res) {
-  console.log("start");
-  console.log(req.body);
-
   //jwt decoding
   // console.log(jwt_decode(req.get('Authorization').split(' ')[1]));
 
   if (req.file) {
-    console.log("IN");
-
     const file = dataUri(req);
     cloudinary.config();
 
@@ -48,7 +72,6 @@ app.post("/upload", [jwtCheck, multerUploads], function (req, res) {
       .then((result) => {
         const image = result.url;
 
-        console.log("in");
         res.set("Access-Control-Allow-Origin", "*");
         res.status(200).json({
           messge: "Your image has been uploded successfully to cloudinary",
@@ -56,9 +79,6 @@ app.post("/upload", [jwtCheck, multerUploads], function (req, res) {
             image,
           },
         });
-
-        console.log(res);
-        console.log("in the end");
       })
       .catch((error) =>
         res.status(400).json({
@@ -69,5 +89,4 @@ app.post("/upload", [jwtCheck, multerUploads], function (req, res) {
         })
       );
   }
-  console.log("out");
 });
