@@ -13,9 +13,11 @@ const app = express();
 const port = process.env.PORT || 4000;
 
 // declare connection string and connect the app
-const dbURI = 'mongodb+srv://vscodeUser:' +
-  process.env.MONGODB_USER_PASSWORD +   
-  '@cluster0.ma8hc.mongodb.net/movie_upload?retryWrites=true&w=majority';
+const dbURI = 'mongodb+srv://'
+ + process.env.MONGODB_USERNAME
+ + ':'
+ + process.env.MONGODB_USER_PASSWORD 
+ + '@cluster0.ma8hc.mongodb.net/movie_upload?retryWrites=true&w=majority';
 mongoose.connect(dbURI,{ useNewUrlParser: true, useUnifiedTopology: true })
   .then(result => app.listen(port, () => console.log(`Listening to port ${port}`)))
   .catch(err => console.log(err));
