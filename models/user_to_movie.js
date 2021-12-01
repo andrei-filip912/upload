@@ -1,4 +1,3 @@
-const { Double } = require('bson');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -8,9 +7,10 @@ const user_to_movieSchema = new Schema({
         required: true
     },
     movies: [{
-        title: String,
+        name: String,
+        fileType: String,
+        size: Number,
         url: String,
-        length: Number
     }]
 }, { timestamps: true});
 

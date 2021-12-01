@@ -1,11 +1,9 @@
-# This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+# This is the production workflow. It will do a clean install of node dependencies, cache/restore them, build the source code, run tests,
+# then build and push a docker image to dockerhub
 
-name: Node.js CI
+name: Production CI/CD
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
     branches: [ main ]
 
@@ -30,17 +28,17 @@ jobs:
     - name: Install npm packages
       run: npm i
 
-    - name: Create npm build
+    - name: Run app in production mode
       run: npm start
 
-    # - name: run tests
+    # - name: Run tests
     #   run: npm run ciTest
     
     - name: Build & push Docker image
       uses: mr-smithers-excellent/docker-build-push@v5
       with:
         image: af912/upload-api
-        tags: v1, latest
+        tags: latest
         registry: docker.io
         # dockerfile: Dockerfile.ci
         username: ${{ secrets.DOCKER_USERNAME }}
