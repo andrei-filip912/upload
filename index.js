@@ -59,15 +59,7 @@ async function updateOrCreateUser(user_id, movie) {
   return result;
   
 }
-function wentWrong(res, err) {
-  res.set("Access-Control-Allow-Origin", "*");
-  res.status(400).json({
-    message: "something went wrong while processing your request",
-    data: {
-      err,
-    },
-  });
-}
+
 app.post("/upload", [jwtCheck, multerUploads], function (req, res) {
   //jwt decoding
   const token = jwt_decode(req.get('Authorization').split(' ')[1]);
@@ -94,7 +86,15 @@ app.post("/upload", [jwtCheck, multerUploads], function (req, res) {
         // why do I always get status200 ok
         updateOrCreateUser(user_id, movie)
         .then(response => console.log(response))
-        .catch(err => { wentWrong(res, err); });
+        .catch(err => { 
+          res.set("Access-Control-Allow-Origin", "*");
+          res.status(400).json({
+            message: "something went wrong while processing your request",
+            data: {
+              err,
+            },
+          });
+         });
 
         res.set("Access-Control-Allow-Origin", "*");
         res.status(200).json({
@@ -105,7 +105,13 @@ app.post("/upload", [jwtCheck, multerUploads], function (req, res) {
         });
       })
       .catch((err) =>{
-        wentWrong(res,err);
+        res.set("Access-Control-Allow-Origin", "*");
+        res.status(400).json({
+          message: "something went wrong while processing your request",
+          data: {
+            err,
+          },
+        });
       });
   }
 });
