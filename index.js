@@ -6,7 +6,9 @@ const { jwtCheck } = require("./auth/checkJwt");
 const jwt_decode = require("jwt-decode");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const User_to_movie = require('./models/user_to_movie');
+// const User_to_movie = require('./models/user_to_movie.model');
+const UserService = require('./user/services/user.service');
+
 
 // create the app, set the port
 const app = express();
@@ -30,35 +32,21 @@ app.use(express.json({ strict: false }));
 app.use(express.urlencoded({ extended: true }));
 
 
-async function addUser(user_id, movie) {
-  const user_to_movie = new User_to_movie({
-    user_id: user_id,
-    movies: [movie]
-  });
+// app.get('/add-user', async (req, res) => {
+//   movie = {
+//     name: "ceva",
+//     fileType: "video",
+//     size: 5345,
+//     url: "asdf",
+//   }
+//   try {
+//     const user = await UserService.updateOrCreateUser('cibilan', movie);
+//     res.json(user);
 
-  return await user_to_movie.save();
-}
-async function addMovieToUser(user, movie) {
-  user.movies.push(movie);
-
-  return await user.save();
-}
-async function updateOrCreateUser(user_id, movie) {
-  let result;
-  const filter = { user_id: user_id };
-
-  const user = await User_to_movie.findOne(filter);
-
-  if(user != undefined){
-    result = await addMovieToUser(user, movie);
-  }
-  else{
-    result = await addUser(user_id, movie);
-  }
-
-  return result;
-  
-}
+//   } catch (err) {
+//     console.log(err);
+//   }
+// });
 
 app.post("/upload", [jwtCheck, multerUploads], function (req, res) {
   //jwt decoding
@@ -83,18 +71,8 @@ app.post("/upload", [jwtCheck, multerUploads], function (req, res) {
           url: result.url,
         }
 
-        // why do I always get status200 ok
-        updateOrCreateUser(user_id, movie)
-        .then(response => console.log(response))
-        .catch(err => { 
-          res.set("Access-Control-Allow-Origin", "*");
-          res.status(400).json({
-            message: "something went wrong while processing your request",
-            data: {
-              err,
-            },
-          });
-         });
+
+        updateOrCreateUser(user_id, movie);
 
         res.set("Access-Control-Allow-Origin", "*");
         res.status(200).json({
