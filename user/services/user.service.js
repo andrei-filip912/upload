@@ -1,6 +1,11 @@
 const UserModel = require("../models/user.model");
 
 const addUser =  (user_id, movie) => {
+    if(user_id == '')
+        throw new Error('user_id cannot be null');
+    if(movie == {})
+        throw new Error('movie cannot be null');
+    
     const user = new UserModel({
         user_id: user_id,
         movies: [movie]
