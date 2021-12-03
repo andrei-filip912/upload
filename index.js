@@ -7,7 +7,7 @@ const jwt_decode = require("jwt-decode");
 const cors = require("cors");
 const mongoose = require("mongoose");
 // const User_to_movie = require('./models/user_to_movie.model');
-const UserService = require('./user/services/user.service');
+const userService = require('./user/services/user.service');
 
 
 // create the app, set the port
@@ -72,7 +72,7 @@ app.post("/upload", [jwtCheck, multerUploads], function (req, res) {
         }
 
 
-        updateOrCreateUser(user_id, movie);
+        userService.updateOrCreateUser(user_id, movie);
 
         res.set("Access-Control-Allow-Origin", "*");
         res.status(200).json({
