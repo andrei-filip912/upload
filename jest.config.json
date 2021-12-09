@@ -1,4 +1,6 @@
 {
+    "testEnvironment": "node",
+    "testMatch": ["**/__tests__/**/*.test.js"],
     "collectCoverage":true,
     "verbose": true,
     "modulePaths": ["<rootDir>/node_modules/", "<rootDir>/__mocks__/"],

@@ -31,8 +31,8 @@ jobs:
     - name: Run app in production mode
       run: npm start
 
-    # - name: Run tests
-    #   run: npm run ciTest
+    - name: Run tests
+      run: npm run ciTest
     
     - name: Build & push Docker image
       uses: mr-smithers-excellent/docker-build-push@v5
