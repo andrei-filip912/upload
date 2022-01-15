@@ -73,6 +73,9 @@ describe('user', () => {
         expect(JSON.stringify(user.movies[0])).toEqual(JSON.stringify(userToFind.movies[0]));
         expect(JSON.stringify(user.movies[1])).toEqual(JSON.stringify(userToFind.movies[1]));
     })
-    
+    test.skip('getting a users movies', async () => {
+        await userService.addUser(user_id, movie);
+        const user = await userService.addMovieToUser(user_id, anotherMovie);
+    })
     
 })
