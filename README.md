@@ -3,12 +3,12 @@
 ## Repo Summary:
 
 In the repository you can find the api responsible for uploading and playing videos for the **Movie upload** project.\
-It is done using Express.js and it is using the Cloudinary CDN.\
+It is done using Express.js and it is using the Cloudinary CDN.
 
 ## Get Started:
 To get started:
-- run **npm install**\
-- create an `.env` file with the following content:\
+- run **npm install**
+- create an `.env` file with the following content:
   ```bash
   CLOUDINARY_CLOUD_NAME=
   CLOUDINARY_API_KEY=
@@ -16,8 +16,8 @@ To get started:
   MONGODB_USERNAME=
   MONGODB_USER_PASSWORD=
   ```
-- run **npm run dev**\
-- to get more info about the api check the project documentation: https://github.com/andrei-filip912/movie-upload-documentation/blob/main/Project%20Plan%20%2B%20Architectural%20choices.docx\
+- run **npm run dev**
+- to get more info about the api check the project documentation: https://github.com/andrei-filip912/movie-upload-documentation/blob/main/Project%20Plan%20%2B%20Architectural%20choices.docx
 
 
 ## Available Scripts
