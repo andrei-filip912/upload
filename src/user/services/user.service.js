@@ -17,6 +17,14 @@ const addUser =  (user_id, movie) => {
 const findUser = (user_id) => {
     return UserModel.findOne({user_id: user_id});
 };
+const getUserMovies = async (user_id) => {
+    const user = await findUser(user_id);
+
+    if(user != null)
+        return user.movies;
+    
+    return null;
+}
 
 // this method is using find function
 const addMovieToUser = async (user_id, movie) => {
@@ -41,6 +49,7 @@ async function updateOrCreateUser(user_id, movie) {
 module.exports = {
     addUser,
     addMovieToUser,
+    getUserMovies,
     findUser,
     updateOrCreateUser,
 };

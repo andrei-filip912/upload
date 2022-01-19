@@ -28,7 +28,8 @@
     "mongoose": "^6.0.13",
     "multer": "^1.4.3",
     "nock": "^13.2.1",
-    "supertest": "^6.1.6"
+    "supertest": "^6.1.6",
+    "node-forge": ">=1.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",

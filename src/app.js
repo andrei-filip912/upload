@@ -18,39 +18,26 @@ app.use(cors());
 app.use(express.json({ strict: false }));
 app.use(express.urlencoded({ extended: true }));
 
-
-// app.get('/add-user', async (req, res) => {
-//   movie = {
-//     name: "ceva",
-//     fileType: "video",
-//     size: 5345,
-//     url: "asdf",
-//   }
-//   try {
-//     const user = await UserService.updateOrCreateUser('cibilan', movie);
-//     res.json(user);
-
-//   } catch (err) {
-//     console.log(err);
-//   }
-// });
+function decodeJwt(encodedToken) {
+  //jwt decoding
+  const token = jwt_decode(encodedToken);
+  return token.sub;
+}
 
 app.post("/upload", [jwtCheck, multerUploads], function (req, res) {
-  //jwt decoding
-  const token = jwt_decode(req.get('Authorization').split(' ')[1]);
-  const user_id = token.sub;
-
+  res.set("Access-Control-Allow-Origin", "*");
   if (req.file) {
-    const {originalname, mimetype, size} = req.file;
-
     const file = dataUri(req);
     cloudinary.config();
-  
-    return cloudinary.uploader
-      .upload(file)
-      .then((result) => {
-        const image = result.url;
 
+    return cloudinary.uploader
+      .upload(file, {resource_type: "video"})
+      .then((result) => {
+        // get user_id
+        const user_id = decodeJwt(req.get('Authorization').split(' ')[1]);
+
+        // get the props and create movie object
+        const {originalname, mimetype, size} = req.file;
         const movie = {
           name: originalname,
           fileType: mimetype,
@@ -58,27 +45,40 @@ app.post("/upload", [jwtCheck, multerUploads], function (req, res) {
           url: result.url,
         }
 
-
+        // save to database
         userService.updateOrCreateUser(user_id, movie);
 
-        res.set("Access-Control-Allow-Origin", "*");
+        
         res.status(200).json({
-          message: "Your image has been uploded successfully to cloudinary",
-          data: {
-            image,
-          },
+          message: "Your video has been successfully uploaded!",
         });
       })
       .catch((err) =>{
-        res.set("Access-Control-Allow-Origin", "*");
-        res.status(400).json({
-          message: "something went wrong while processing your request",
-          data: {
-            err,
-          },
-        });
+          res.sendStatus(400);
       });
   }
 });
+
+app.get("/movies", [jwtCheck], async function(req, res) {
+  // get user_id
+  const user_id = decodeJwt(req.get('Authorization').split(' ')[1]);
+
+  // get the list of movies
+  userService.getUserMovies(user_id)
+  .then(result  => {  
+    res.set("Access-Control-Allow-Origin", "*");
+    res.status(200).json({
+      // result can be null if the user is not saved id db
+      //  or [] if the user has no movies
+      result
+    })
+  })
+  .catch(err => {
+    res.set("Access-Control-Allow-Origin", "*");
+    res.status(400).json({
+      message: "something went wrong while processing your request",
+    });
+  });
+})
 
 module.exports = app;
