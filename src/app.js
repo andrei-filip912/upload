@@ -26,6 +26,7 @@ function decodeJwt(encodedToken) {
 
 app.post("/upload", [jwtCheck, multerUploads], function (req, res) {
   res.set("Access-Control-Allow-Origin", "*");
+  
   if (req.file) {
     const file = dataUri(req);
     cloudinary.config();
