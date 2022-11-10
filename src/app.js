@@ -68,11 +68,10 @@ app.get("/movies", [jwtCheck], async function(req, res) {
   userService.getUserMovies(user_id)
   .then(result  => {  
     res.set("Access-Control-Allow-Origin", "*");
-    res.status(200).json({
-      // result can be null if the user is not saved id db
-      //  or [] if the user has no movies
-      result
-    })
+
+    // result can be null if the user is not saved id db
+    //  or [] if the user has no movies
+    res.status(200).json({result});
   })
   .catch(err => {
     res.set("Access-Control-Allow-Origin", "*");
